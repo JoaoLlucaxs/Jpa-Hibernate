@@ -1,6 +1,5 @@
 package com.test;
 
-import com.dao.CategoriaDAO;
 import com.model.Categoria;
 import com.connection.ConnectionFactory;
 
@@ -10,23 +9,19 @@ public class CategoriaTest {
     public static void main(String[] args) {
 
         Categoria categoria=new Categoria();
-        categoria.setId(1);
-        categoria.setDescricao("Java Trainee");
+        categoria.setDescricao("Java Pleno");
 
+        EntityManager entityManager=new ConnectionFactory().getConnection();
 
-        CategoriaDAO dao=new CategoriaDAO();
-        categoria=dao.salvar(categoria);
+        // INICIANDO TRANSAÇÃO
+        entityManager.getTransaction().begin();
 
-        System.out.println("ID" + categoria.getId());
-        System.out.println("DESCRICAO " +categoria.getDescricao());
+        // PERSISTINDO NO BANCO
+        entityManager.persist(categoria);
 
-        //=============================================================================
+        //COMITAR TRANSAÇÃO
+        entityManager.getTransaction().commit();
 
-        CategoriaDAO dao1=new CategoriaDAO();
-
-        Categoria categoria1= dao1.findById(1);
-
-        System.out.println("BUSCANDO POR ID " + categoria1.getDescricao());
-
+        entityManager.close();
     }
 }
